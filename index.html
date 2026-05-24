@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardiner</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<!-- Lógica de login — conecta el botón con el webhook de n8n -->
+<script src="js/auth.js"></script>
+
+<body>
+
+  <!-- TARJETA CENTRAL DE LOGIN -->
+  <div class="login-card">
+
+    <!-- Espacio reservado para el logo — cuando llegue, sustituir por <img src="assets/logo.png"> -->
+    <div class="logo-placeholder">
+      <span>Logo</span>
+    </div>
+
+    <!-- CAMPO USUARIO -->
+    <div class="field-group">
+      <label class="field-label" for="usuario">Usuari</label>
+      <div class="field-wrap">
+        <!-- Icono decorativo dentro del input, el for="usuario" del label conecta con el id="usuario" del input -->
+        <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <input class="field-input" type="text" id="usuario" placeholder="Usuari" autocomplete="username">
+      </div>
+    </div>
+
+    <!-- CAMPO CONTRASEÑA — type="password" enmascara automáticamente los caracteres -->
+    <div class="field-group">
+      <label class="field-label" for="password">Contrasenya</label>
+      <div class="field-wrap">
+        <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input class="field-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+
+    <!-- BOTÓN — el id="btn-login" lo usaremos desde auth.js para detectar el clic -->
+    <button class="login-btn" id="btn-login">Entrar</button>
+
+    <p class="login-footer">Gorekia © 2026</p>
+
+  </div>
+
+</body>
+</html>
