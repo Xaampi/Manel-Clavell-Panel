@@ -1,0 +1,175 @@
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── FILTROS ── */
+.filters-top {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filters-bottom {
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-input {
+  height: 34px;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.filter-input:focus { border-color: var(--verde); }
+.filter-input.medium { width: 130px; }
+
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: #bbb;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.filter-input.wide {
+  width: 160px;
+  padding-left: 30px;
+}
+
+.btn-generar {
+  margin-left: auto;
+  height: 34px;
+  padding: 0 14px;
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.btn-generar:hover { background: var(--verde-hover); }
+
+.selected-count {
+  font-size: 12px;
+  color: var(--verde);
+  font-weight: 500;
+}
+
+/* ── TABLA TIPO EXCEL ── */
+.table-wrap {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #d8d8d5;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Columnas: checkbox | client | data | hores | concepte | material | preu */
+.table-head-row,
+.table-data-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 100px 66px 1fr 100px 86px;
+}
+
+/* Cabecera */
+.table-head-row .cell {
+  background: #f2f2ef;
+  border-bottom: 1px solid #d0d0cc;
+  border-right: 1px solid #d8d8d5;
+  padding: 8px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.table-head-row .cell:last-child { border-right: none; }
+
+/* Cuerpo */
+.table-body { overflow-y: auto; flex: 1; }
+
+.table-data-row { cursor: pointer; }
+
+.table-data-row .cell {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #2a2a2a;
+  border-bottom: 1px solid #ebebea;
+  border-right: 1px solid #e8e8e6;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  transition: background 0.1s;
+}
+
+.table-data-row .cell:last-child { border-right: none; }
+.table-data-row:hover .cell { background: #f6fbf0; }
+.table-data-row.selected .cell { background: #eef7e4; border-bottom-color: #d8edca; }
+
+/* Celda vacía o sin valor */
+.cell.dim { color: #bbb; font-size: 11px; }
+
+/* Checkbox */
+.check {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.check.on { background: var(--verde); border-color: var(--verde); }
+
+/* Loading y empty state */
+.table-loading,
+.table-empty {
+  padding: 32px 16px;
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
+}
+
+/* Footer */
+.table-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #e8e8e6;
+  background: #f9f9f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.table-footer span { font-size: 11px; color: #aaa; }

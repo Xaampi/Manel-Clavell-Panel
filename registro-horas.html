@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardineria — Registre d'hores</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/registro.css">
+</head>
+
+<body>
+<div class="panel">
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="toggle-btn" id="toggleBtn" aria-label="Plegar menú">
+        <i class="ti ti-layout-sidebar-left-collapse" id="toggleIcon"></i>
+      </button>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+        <span class="nav-label">Inicio</span>
+      </a>
+      <a href="registro-horas.html" class="nav-item active">
+        <i class="ti ti-clock" aria-hidden="true"></i>
+        <span class="nav-label">Hores</span>
+      </a>
+      <a href="generador-facturas.html" class="nav-item">
+        <i class="ti ti-file-invoice" aria-hidden="true"></i>
+        <span class="nav-label">Facturas</span>
+      </a>
+      <a href="crm-facturas.html" class="nav-item">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <span class="nav-label">Cobros</span>
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="nav-item logout" id="btn-logout">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        <span class="nav-label">Salir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Registre d'hores</span>
+      <span class="topbar-date" id="fecha-hoy"></span>
+    </div>
+
+    <div class="content">
+
+      <!-- FILTROS -->
+      <div class="filters-top">
+        <div class="search-wrap">
+          <i class="ti ti-search search-icon" aria-hidden="true"></i>
+          <input class="filter-input wide" type="text" id="filtro-cliente" placeholder="Buscar client...">
+        </div>
+        <input class="filter-input medium" type="date" id="filtro-desde">
+        <input class="filter-input medium" type="date" id="filtro-hasta">
+        <!-- El botón siempre visible, se activa cuando hay filas seleccionadas -->
+        <button class="btn-generar" id="btn-generar" onclick="irAGenerador()">
+          <i class="ti ti-file-invoice" aria-hidden="true"></i>
+          Generar factura
+        </button>
+      </div>
+      <!-- Contador de filas seleccionadas -->
+      <div class="filters-bottom">
+        <span class="selected-count" id="sel-count"></span>
+      </div>
+
+      <!-- TABLA -->
+      <div class="table-wrap">
+        <div class="table-head-row">
+          <div class="cell"></div>
+          <div class="cell">Client</div>
+          <div class="cell">Data</div>
+          <div class="cell">Hores</div>
+          <div class="cell">Concepte</div>
+          <div class="cell">Material</div>
+          <div class="cell">Preu/unit</div>
+        </div>
+        <!-- Las filas se generan desde JS con los datos de Google Sheets -->
+        <div class="table-body" id="tbody">
+          <div class="table-loading">Carregant dades...</div>
+        </div>
+        <div class="table-footer">
+          <span id="footer-txt">—</span>
+          <span>Actualitzat des de Google Sheets</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/registro.js"></script>
+</body>
+</html>
