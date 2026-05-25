@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardineria — Panel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+<div class="panel">
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="toggle-btn" id="toggleBtn" aria-label="Plegar menú">
+        <i class="ti ti-layout-sidebar-left-collapse" id="toggleIcon"></i>
+      </button>
+    </div>
+
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+        <span class="nav-label">Inicio</span>
+      </a>
+      <a href="registro-horas.html" class="nav-item">
+        <i class="ti ti-clock" aria-hidden="true"></i>
+        <span class="nav-label">Horas</span>
+      </a>
+      <a href="generador-facturas.html" class="nav-item">
+        <i class="ti ti-file-invoice" aria-hidden="true"></i>
+        <span class="nav-label">Facturas</span>
+      </a>
+      <a href="crm-facturas.html" class="nav-item">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <span class="nav-label">Cobros</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item logout" id="btn-logout">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        <span class="nav-label">Salir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Inicio</span>
+      <span class="topbar-date" id="fecha-hoy"></span>
+    </div>
+
+    <div class="content">
+      <p class="section-title">Resumen del mes</p>
+      <div class="cards">
+        <div class="card">
+          <p class="card-label">Horas registradas</p>
+          <p class="card-value">—</p>
+          <p class="card-sub">Este mes</p>
+        </div>
+        <div class="card">
+          <p class="card-label">Facturas emitidas</p>
+          <p class="card-value green">—</p>
+          <p class="card-sub">Este mes</p>
+        </div>
+        <div class="card">
+          <p class="card-label">Pendiente de cobro</p>
+          <p class="card-value">—</p>
+          <p class="card-sub">—</p>
+        </div>
+      </div>
+
+      <p class="section-title">Últimas facturas</p>
+      <div class="table-wrap">
+        <div class="table-head">
+          <span>Cliente</span>
+          <span>Fecha</span>
+          <span>Importe</span>
+          <span>Estado</span>
+        </div>
+        <div class="table-empty">
+          <p>No hay facturas registradas aún.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

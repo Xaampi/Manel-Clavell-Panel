@@ -1,0 +1,170 @@
+/* Tabler Icons — librería de iconos */
+@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css');
+
+.panel {
+  display: flex;
+  height: 100vh;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: var(--gris-fondo);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 200px;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sidebar.collapsed { width: 56px; }
+
+.sidebar-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px;
+  margin-bottom: 28px;
+}
+
+.sidebar.collapsed .sidebar-top {
+  justify-content: center;
+  padding: 0;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-btn:hover { color: #ccc; background: #2a2a2a; }
+.sidebar.collapsed .toggle-btn { margin: 0 auto; }
+
+.nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: #2a2a2a; color: #ccc; }
+.nav-item.active { background: var(--verde); color: #fff; }
+.nav-item i { font-size: 18px; flex-shrink: 0; }
+
+/* Cuando está plegado las etiquetas desaparecen */
+.sidebar.collapsed .nav-label { display: none; }
+
+.sidebar-bottom {
+  margin-top: auto;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.nav-item.logout { color: #666; }
+.nav-item.logout:hover { background: #2a2a2a; color: #e05555; }
+
+/* ── CONTENIDO PRINCIPAL ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  background: #fff;
+  border-bottom: 0.5px solid #e8e8e8;
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.topbar-title { font-size: 15px; font-weight: 600; color: var(--negro); }
+.topbar-date { font-size: 12px; color: #999; }
+
+.content { flex: 1; padding: 24px; overflow-y: auto; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: #aaa;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── TARJETAS DE RESUMEN ── */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+
+.card { background: #fff; border-radius: 10px; border: 0.5px solid #e8e8e8; padding: 16px 18px; }
+.card-label { font-size: 11px; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.card-value { font-size: 26px; font-weight: 600; color: var(--negro); }
+.card-value.green { color: var(--verde); }
+.card-sub { font-size: 11px; color: #bbb; margin-top: 4px; }
+
+/* ── TABLA DE FACTURAS ── */
+.table-wrap { background: #fff; border-radius: 10px; border: 0.5px solid #e8e8e8; overflow: hidden; }
+
+.table-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 90px;
+  padding: 10px 16px;
+  background: #f9f9f7;
+  border-bottom: 0.5px solid #e8e8e8;
+}
+
+.table-head span { font-size: 11px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.4px; }
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 90px;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid #f0f0f0;
+  align-items: center;
+}
+
+.table-row:last-child { border-bottom: none; }
+.table-row span { font-size: 13px; color: #333; }
+
+.table-empty { padding: 24px 16px; font-size: 13px; color: #bbb; }
+
+/* ── BADGES DE ESTADO ── */
+.badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.badge.cobrada { background: #eaf3de; color: #3b6d11; }
+.badge.pendiente { background: #faeeda; color: #854f0b; }
+.badge.enviada { background: #e6f1fb; color: #185fa5; }
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.panel {
+  width: 100%;
+}
