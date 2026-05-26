@@ -74,7 +74,9 @@ function renderTabla(registros) {
       <div class="cell">${r["HORES TOTALS"] || "—"}</div>
       <div class="cell">${r["CONCEPTE"] || "—"}</div>
       <div class="cell ${!r["MATERIAL"] || r["MATERIAL"].trim() === "" ? "dim" : ""}">${r["MATERIAL"] || "—"}</div>
-      <div class="cell">${r["PREU-UNITAT"] || "—"}</div>
+      <div class="cell">${r["QUANTITAT"] || "—"}</div>
+      <div class="cell">${r["PREU-UNITARI"] || "—"}</div>
+      <div class="cell">${r["PREU-TOTAL"] || "—"}</div>
     `;
 
     fila.addEventListener("click", function () {
