@@ -20,6 +20,7 @@ async function cargarRegistros() {
     const res = await fetch(WEBHOOK_SHEETS);
     const datos = await res.json();
     todosLosRegistros = datos;
+    localStorage.setItem("registres_cache", JSON.stringify(datos));
     renderTabla(todosLosRegistros);
   } catch (e) {
     document.getElementById("tbody").innerHTML =

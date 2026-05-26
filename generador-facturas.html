@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardineria — Generador de factures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/generador-facturas.css">
+</head>
+
+<body>
+<div class="panel">
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="toggle-btn" id="toggleBtn" aria-label="Plegar menú">
+        <i class="ti ti-layout-sidebar-left-collapse" id="toggleIcon"></i>
+      </button>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="ti ti-layout-dashboard"></i>
+        <span class="nav-label">Inicio</span>
+      </a>
+      <a href="registro-horas.html" class="nav-item">
+        <i class="ti ti-clock"></i>
+        <span class="nav-label">Hores</span>
+      </a>
+      <a href="generador-facturas.html" class="nav-item active">
+        <i class="ti ti-file-invoice"></i>
+        <span class="nav-label">Facturas</span>
+      </a>
+      <a href="crm-facturas.html" class="nav-item">
+        <i class="ti ti-credit-card"></i>
+        <span class="nav-label">Cobros</span>
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="nav-item logout" id="btn-logout">
+        <i class="ti ti-logout"></i>
+        <span class="nav-label">Salir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Generador de factures</span>
+      <span class="topbar-date" id="fecha-hoy"></span>
+    </div>
+
+    <div class="content-generador">
+
+      <!-- IZQUIERDA: filas seleccionadas -->
+      <div class="col-left">
+        <span class="section-label">Línies seleccionades</span>
+        <div class="table-wrap">
+          <div class="table-head-row">
+            <div class="cell">Concepte</div>
+            <div class="cell">Hores</div>
+            <div class="cell">Preu/u</div>
+            <div class="cell">Total</div>
+          </div>
+          <!-- Filas generadas dinámicamente desde localStorage -->
+          <div class="table-body" id="linies-tbody"></div>
+          <div class="table-footer">
+            <span id="resum-linies">— línies</span>
+            <span class="total" id="resum-total">0,00 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERECHA: formulario -->
+      <div class="col-right">
+        <span class="section-label">Dades de la factura</span>
+        <div class="form-card">
+          <div class="field-group">
+            <label class="field-label" for="nom-client">Nom del client</label>
+            <input class="field-input" type="text" id="nom-client" placeholder="Vilaclara S.L.">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="nif-client">NIF del client</label>
+            <input class="field-input" type="text" id="nif-client" placeholder="B12345678">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="num-factura">Número de factura</label>
+            <!-- Se autocompletará con el siguiente número disponible -->
+            <input class="field-input" type="text" id="num-factura" placeholder="2026-001">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="data-factura">Data de la factura</label>
+            <input class="field-input" type="date" id="data-factura">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="notes">Notes (opcional)</label>
+            <textarea class="field-input" id="notes" placeholder="Observacions, condicions de pagament..."></textarea>
+          </div>
+        </div>
+
+        <button class="btn-generar" id="btn-generar">
+          <i class="ti ti-sparkles"></i>
+          Generar factura amb IA
+        </button>
+        <button class="btn-secondary" onclick="window.location.href='registro-horas.html'">
+          <i class="ti ti-arrow-left"></i>
+          Tornar al registre
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/generador-facturas.js"></script>
+</body>
+</html>
