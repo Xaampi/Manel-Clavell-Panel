@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ── CARGAR FILAS SELECCIONADAS ──
+const PRECIO_HORA = 22.5;
+
 function cargarLinies() {
   const indexos = JSON.parse(localStorage.getItem("filas_seleccionadas") || "[]");
   const registres = JSON.parse(localStorage.getItem("registres_cache") || "[]");
@@ -29,35 +31,57 @@ function cargarLinies() {
   }
 
   const linies = indexos.map(i => registres[i]).filter(Boolean);
-  let totalHores = 0;
-  let totalImport = 0;
+
+  // Autorellenar el nombre del cliente con el de la primera fila seleccionada
+  const nomClient = linies[0]["NOM CLIENT"] || "";
+  document.getElementById("nom-client").value = nomClient;
+
+  let totalGeneral = 0;
+  let totalHoresGeneral = 0;
 
   linies.forEach(r => {
     const hores = parseFloat(r["HORES TOTALS"]) || 0;
-    const preu = parseFloat(r["PREU-UNITAT"]) || 0;
-    const total = hores * preu;
-    totalHores += hores;
-    totalImport += total;
+    const totalMaObra = hores * PRECIO_HORA;
+    const totalMaterial = parseFloat(r["PREU-TOTAL"]) || 0;
+    totalHoresGeneral += hores;
+    totalGeneral += totalMaObra + totalMaterial;
 
-    const fila = document.createElement("div");
-    fila.className = "table-data-row";
-    fila.innerHTML = `
+    // Línea 1 — mà d'obra
+    const filaMaObra = document.createElement("div");
+    filaMaObra.className = "table-data-row";
+    filaMaObra.innerHTML = `
       <div class="cell">${r["CONCEPTE"] || "—"}</div>
       <div class="cell right">${hores}h</div>
-      <div class="cell right">${preu > 0 ? preu + " €" : "—"}</div>
-      <div class="cell right">${total > 0 ? total.toFixed(2) + " €" : "—"}</div>
+      <div class="cell right">22,5 €</div>
+      <div class="cell right">${totalMaObra.toFixed(2)} €</div>
     `;
-    tbody.appendChild(fila);
+    tbody.appendChild(filaMaObra);
+
+    // Línea 2 — material (solo si existe)
+    const material = r["MATERIAL"] ? r["MATERIAL"].trim() : "";
+    const quantitat = r["QUANTITAT"] ? r["QUANTITAT"].toString().trim() : "";
+    const preuUnitari = parseFloat(r["PREU-UNITARI"]) || 0;
+
+    if (material && material !== "" && totalMaterial > 0) {
+      const filaMaterial = document.createElement("div");
+      filaMaterial.className = "table-data-row material-row";
+      filaMaterial.innerHTML = `
+        <div class="cell dim">Material: ${material}</div>
+        <div class="cell right dim">${quantitat}</div>
+        <div class="cell right dim">${preuUnitari > 0 ? preuUnitari + " €" : "—"}</div>
+        <div class="cell right dim">${totalMaterial.toFixed(2)} €</div>
+      `;
+      tbody.appendChild(filaMaterial);
+    }
   });
 
   document.getElementById("resum-linies").textContent =
-    linies.length + " líni" + (linies.length > 1 ? "es" : "a") + " · " + totalHores + "h";
+    linies.length + " líni" + (linies.length > 1 ? "es" : "a") + " · " + totalHoresGeneral + "h";
   document.getElementById("resum-total").textContent =
-    totalImport.toFixed(2).replace(".", ",") + " €";
+    totalGeneral.toFixed(2).replace(".", ",") + " €";
 
-  // Guardamos las líneas procesadas para usarlas al generar
   window.liniesFactura = linies;
-  window.totalFactura = totalImport;
+  window.totalFactura = totalGeneral;
 }
 
 // ── GENERAR FACTURA ──
@@ -92,16 +116,19 @@ async function generarFactura() {
       })
     });
 
-    const dades = await res.json();
+    if (!res.ok) throw new Error("Error del servidor");
 
-    if (dades.url_pdf) {
-      // Redirigir a la previsualización o descargar directamente
-      window.open(dades.url_pdf, "_blank");
-      // Limpiar selección
-      localStorage.removeItem("filas_seleccionadas");
-    } else {
-      alert("La factura s'ha generat correctament.");
-    }
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Factura_${numFactura}_${nomClient}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    localStorage.removeItem("filas_seleccionades");
 
   } catch (e) {
     alert("Error en generar la factura. Comprova la connexió amb n8n.");
