@@ -86,6 +86,7 @@ function cargarLinies() {
 
 // ── GENERAR FACTURA ──
 async function generarFactura() {
+  console.log("Generant factura...");
   const nomClient = document.getElementById("nom-client").value.trim();
   const nifClient = document.getElementById("nif-client").value.trim();
   const numFactura = document.getElementById("num-factura").value.trim();
@@ -118,15 +119,16 @@ async function generarFactura() {
 
     if (!res.ok) throw new Error("Error del servidor");
 
-    const blob = await res.blob();
+    const arrayBuffer = await res.arrayBuffer();
+    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `Factura_${numFactura}_${nomClient}.pdf`;
     document.body.appendChild(a);
     a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => window.URL.revokeObjectURL(url), 5000);
 
     localStorage.removeItem("filas_seleccionades");
 
