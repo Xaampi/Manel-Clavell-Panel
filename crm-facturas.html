@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardineria — CRM Factures</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/crm-facturas.css">
+</head>
+
+<body>
+<div class="panel">
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="toggle-btn" id="toggleBtn" aria-label="Plegar menú">
+        <i class="ti ti-layout-sidebar-left-collapse" id="toggleIcon"></i>
+      </button>
+    </div>
+
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+        <span class="nav-label">Inici</span>
+      </a>
+      <a href="registro-horas.html" class="nav-item">
+        <i class="ti ti-clock" aria-hidden="true"></i>
+        <span class="nav-label">Hores</span>
+      </a>
+      <a href="generador-facturas.html" class="nav-item">
+        <i class="ti ti-file-invoice" aria-hidden="true"></i>
+        <span class="nav-label">Factures</span>
+      </a>
+      <a href="crm-facturas.html" class="nav-item active">
+        <i class="ti ti-credit-card" aria-hidden="true"></i>
+        <span class="nav-label">Cobros</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item logout" id="btn-logout">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        <span class="nav-label">Sortir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">CRM de factures</span>
+      <span class="topbar-date" id="fecha-hoy"></span>
+    </div>
+
+    <div class="content">
+
+      <p class="section-title">Resum</p>
+      <div class="cards">
+        <div class="card">
+          <p class="card-label">Pendent d'enviar</p>
+          <p class="card-value" id="stat-pending">—</p>
+          <p class="card-sub" id="stat-pending-import">—</p>
+        </div>
+        <div class="card">
+          <p class="card-label">Pendent de cobrar</p>
+          <p class="card-value" id="stat-sent">—</p>
+          <p class="card-sub" id="stat-sent-import">—</p>
+        </div>
+        <div class="card">
+          <p class="card-label">Cobrades</p>
+          <p class="card-value green" id="stat-paid">—</p>
+          <p class="card-sub" id="stat-paid-import">—</p>
+        </div>
+      </div>
+
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label>Des de</label>
+          <input type="date" id="filter-from">
+        </div>
+        <div class="filter-group">
+          <label>Fins a</label>
+          <input type="date" id="filter-to">
+        </div>
+        <div class="filter-group">
+          <label>Estat</label>
+          <select id="filter-estat">
+            <option value="">Tots els estats</option>
+            <option value="Pendent d'enviar">Pendent d'enviar</option>
+            <option value="Pendent de cobrar">Pendent de cobrar</option>
+            <option value="Cobrada">Cobrada</option>
+          </select>
+        </div>
+        <button class="btn-filter" onclick="applyFilters()">
+          <i class="ti ti-filter"></i> Filtrar
+        </button>
+        <button class="btn-clear" onclick="clearFilters()">Netejar</button>
+      </div>
+
+      <p class="section-title">Factures</p>
+      <div class="table-wrap">
+        <div class="crm-head">
+          <span>Núm. factura</span>
+          <span>Client</span>
+          <span>Data</span>
+          <span class="right">Import</span>
+          <span>Estat</span>
+          <span>Notes</span>
+          <span class="right">Accions</span>
+        </div>
+        <div id="table-body">
+          <div class="table-empty">Carregant factures...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL ESTAT -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <p class="modal-title">Canviar estat de la factura</p>
+    <label class="modal-label">Nou estat</label>
+    <select id="modal-select">
+      <option value="Pendent d'enviar">Pendent d'enviar</option>
+      <option value="Pendent de cobrar">Pendent de cobrar</option>
+      <option value="Cobrada">Cobrada</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-clear" onclick="closeModal()">Cancel·lar</button>
+      <button class="btn-filter" onclick="confirmEstat()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/crm-facturas.js"></script>
+</body>
+</html>
