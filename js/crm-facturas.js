@@ -160,26 +160,28 @@ async function confirmEstat() {
     showToast("Error actualitzant l'estat");
   }
 }
-
-// ── DOWNLOAD PDF ──────────────────────────────────────────────────────────────
+// ── DOWNLOAD PDF ────────────
 async function downloadPDF(id) {
   showToast("Generant PDF...");
   try {
+    const factura = allFactures.find(f => f.id === id);
+    const filename = `${factura.num_factura}_${factura.nom_client}.pdf`;
+
     const res = await fetch(WEBHOOK_PDF, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id })
     });
-    const arrayBuffer = await res.arrayBuffer();
-    const blob = new Blob([arrayBuffer], { type: "application/pdf" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url;
-    a.download = "factura.pdf";
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast("PDF descarregat");
   } catch (e) {
     showToast("Error generant el PDF");
