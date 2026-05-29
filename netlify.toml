@@ -1,4 +1,5 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
+    Content-Security-Policy = ""
+    X-Frame-Options = "SAMEORIGIN"

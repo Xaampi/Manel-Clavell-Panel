@@ -73,14 +73,14 @@ function renderTable(facturas) {
       <span>${esc(f.nom_client)}</span>
       <span class="muted">${formatData(f.data_factura)}</span>
       <span class="import">${formatImport(f.total)}</span>
-      <span>${badgeHTML(f.estat)}</span>
+      <span class="badge-cell">${badgeHTML(f.estat)}</span>
       <span class="muted">${esc(f.notes || "—")}</span>
       <span class="right">
         <div class="actions">
           <button class="btn-icon" title="Descarregar PDF" onclick="downloadPDF(${f.id})">
             <i class="ti ti-download"></i>
           </button>
-          <button class="btn-icon" title="Canviar estat" onclick="openModal(${f.id}, '${esc(f.estat)}')">
+          <button class="btn-icon" title="Canviar estat" onclick="openModal(${f.id}, \`${esc(f.estat)}\`)">
             <i class="ti ti-edit"></i>
           </button>
         </div>
