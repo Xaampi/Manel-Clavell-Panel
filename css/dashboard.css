@@ -130,7 +130,7 @@
 
 .table-head {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 90px;
+  grid-template-columns: 1fr 1fr 1fr 160px;
   padding: 10px 16px;
   background: #f9f9f7;
   border-bottom: 0.5px solid #e8e8e8;
@@ -140,7 +140,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 90px;
+  grid-template-columns: 1fr 1fr 1fr 160px;
   padding: 10px 16px;
   border-bottom: 0.5px solid #f0f0f0;
   align-items: center;
@@ -152,7 +152,7 @@
 .table-empty { padding: 24px 16px; font-size: 13px; color: #bbb; }
 
 /* ── BADGES DE ESTADO ── */
-.badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 .badge.cobrada { background: #eaf3de; color: #3b6d11; }
 .badge.pendiente { background: #faeeda; color: #854f0b; }
 .badge.enviada { background: #e6f1fb; color: #185fa5; }
@@ -168,3 +168,17 @@ body {
 .panel {
   width: 100%;
 }
+
+.badge-dot { 
+  width: 6px; 
+  height: 6px; 
+  border-radius: 50%; 
+  flex-shrink: 0; 
+  display: inline-block;
+  margin-right: 2px;
+}
+.badge.pendiente .badge-dot { background: #ba7517; }
+.badge.enviada .badge-dot   { background: #378add; }
+.badge.cobrada .badge-dot   { background: #639922; }
+
+.badge { display: inline-flex; align-items: center; gap: 5px; }
