@@ -94,7 +94,7 @@
 .table-head-row,
 .table-data-row {
   display: grid;
-  grid-template-columns: 32px 1.5fr 90px 60px 2fr 90px 80px 80px 80px;
+  grid-template-columns: 32px 1.5fr 90px 60px 2fr 90px 80px 80px 80px 90px;
 }
 
 /* Cabecera */
@@ -132,6 +132,8 @@
 .table-data-row .cell:last-child { border-right: none; }
 .table-data-row:hover .cell { background: #f6fbf0; }
 .table-data-row.selected .cell { background: #eef7e4; border-bottom-color: #d8edca; }
+.table-data-row.facturat { background: #f4faf0; cursor: default; }
+.facturat-badge { background: #eaf3de; color: #3b6d11; font-size: 11px; font-weight: 600; padding: 2px 12px; border-radius: 99px; white-space: nowrap; }
 
 /* Celda vacía o sin valor */
 .cell.dim { color: #bbb; font-size: 11px; }

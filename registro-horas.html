@@ -61,6 +61,11 @@
         </div>
         <input class="filter-input medium" type="date" id="filtro-desde">
         <input class="filter-input medium" type="date" id="filtro-hasta">
+        <select class="filter-input medium" id="filtro-facturat" style="min-width: 180px;">
+          <option value="totes">Totes</option>
+          <option value="pendents">Pendents de facturar</option>
+          <option value="facturades">Facturades</option>
+        </select>
         <!-- El botón siempre visible, se activa cuando hay filas seleccionadas -->
         <button class="btn-generar" id="btn-generar" onclick="irAGenerador()">
           <i class="ti ti-file-invoice" aria-hidden="true"></i>
@@ -84,6 +89,7 @@
           <div class="cell">Quantitat</div>
           <div class="cell">Preu/unit</div>
           <div class="cell">Total</div>
+          <div class="cell">Facturat</div>
         </div>
         <!-- Las filas se generan desde JS con los datos de Google Sheets -->
         <div class="table-body" id="tbody">
