@@ -133,7 +133,7 @@
 .table-data-row:hover .cell { background: #f6fbf0; }
 .table-data-row.selected .cell { background: #eef7e4; border-bottom-color: #d8edca; }
 .table-data-row.facturat { background: #f4faf0; cursor: default; }
-.facturat-badge { background: #eaf3de; color: #3b6d11; font-size: 11px; font-weight: 600; padding: 2px 12px; border-radius: 99px; white-space: nowrap; }
+.facturat-badge { background: #eaf3de; color: #3b6d11; font-size: 11px; font-weight: 600; }
 
 /* Celda vacía o sin valor */
 .cell.dim { color: #bbb; font-size: 11px; }
