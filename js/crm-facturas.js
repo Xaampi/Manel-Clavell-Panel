@@ -9,7 +9,7 @@ let editingId   = null;
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem("mcj_token")) {
+  if (!localStorage.getItem("mcj_token") || localStorage.getItem("mcj_token") === "") {
     window.location.href = "index.html";
     return;
   }
@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === this) closeModal();
   });
 
+  console.log("Token:", localStorage.getItem("mcj_token"));
   loadFactures();
 });
 
@@ -132,6 +133,7 @@ function clearFilters() {
 
 // ── MODAL ESTAT ───────────────────────────────────────────────────────────────
 function openModal(id, estatActual) {
+  console.log('estat:', estatActual);
   editingId = id;
   document.getElementById("modal-select").value = estatActual;
   document.getElementById("modal-overlay").classList.add("open");

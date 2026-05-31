@@ -1,4 +1,5 @@
 const WEBHOOK_GENERAR = "https://n8n.gorekia.com/webhook/generar-factura";
+const WEBHOOK_NUM_FACTURA = "https://n8n.gorekia.com/webhook/get-next-num-factura";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -10,17 +11,30 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fecha por defecto en el formulario
   document.getElementById("data-factura").value = hoy.toISOString().split("T")[0];
 
+  // Autorellenar número de factura
+  fetch(WEBHOOK_NUM_FACTURA)
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("num-factura").value = data.num_factura;
+    })
+    .catch(e => console.error("Error obtenint num factura:", e));
+
   // Cargar filas seleccionadas desde localStorage
   cargarLinies();
+
+  // Evento dinámico — recalcular al cambiar precio hora
+  document.getElementById("preu-hora").addEventListener("input", function () {
+    document.getElementById("linies-tbody").innerHTML = "";
+    cargarLinies();
+  });
 
   // Botón generar
   document.getElementById("btn-generar").addEventListener("click", generarFactura);
 });
 
 // ── CARGAR FILAS SELECCIONADAS ──
-const PRECIO_HORA = 22.5;
-
 function cargarLinies() {
+  const PRECIO_HORA = parseFloat(document.getElementById("preu-hora").value) || 22.5;
   const indexos = JSON.parse(localStorage.getItem("filas_seleccionadas") || "[]");
   const registres = JSON.parse(localStorage.getItem("registres_cache") || "[]");
   const tbody = document.getElementById("linies-tbody");
@@ -39,6 +53,8 @@ function cargarLinies() {
   let totalGeneral = 0;
   let totalHoresGeneral = 0;
 
+  tbody.innerHTML = "";
+
   linies.forEach(r => {
     const hores = parseFloat(r["HORES TOTALS"]) || 0;
     const totalMaObra = hores * PRECIO_HORA;
@@ -52,7 +68,7 @@ function cargarLinies() {
     filaMaObra.innerHTML = `
       <div class="cell">${r["CONCEPTE"] || "—"}</div>
       <div class="cell right">${hores}h</div>
-      <div class="cell right">22,5 €</div>
+      <div class="cell right">${PRECIO_HORA.toFixed(2).replace(".", ",")} €</div>
       <div class="cell right">${totalMaObra.toFixed(2)} €</div>
     `;
     tbody.appendChild(filaMaObra);
@@ -82,16 +98,17 @@ function cargarLinies() {
 
   window.liniesFactura = linies;
   window.totalFactura = totalGeneral;
+  window.preuHora = PRECIO_HORA;
 }
 
 // ── GENERAR FACTURA ──
 async function generarFactura() {
-  console.log("Generant factura...");
   const nomClient = document.getElementById("nom-client").value.trim();
   const nifClient = document.getElementById("nif-client").value.trim();
   const numFactura = document.getElementById("num-factura").value.trim();
   const dataFactura = document.getElementById("data-factura").value;
   const notes = document.getElementById("notes").value.trim();
+  const preuHora = parseFloat(document.getElementById("preu-hora").value) || 22.5;
 
   if (!nomClient || !nifClient || !numFactura) {
     alert("Omple el nom del client, el NIF i el número de factura.");
@@ -113,14 +130,14 @@ async function generarFactura() {
         nif_client: nifClient,
         notes: notes,
         linies: window.liniesFactura,
-        total: window.totalFactura
+        total: window.totalFactura,
+        preu_hora: preuHora
       })
     });
 
     if (!res.ok) throw new Error("Error del servidor");
 
-    const arrayBuffer = await res.arrayBuffer();
-    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+    const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
