@@ -1,5 +1,8 @@
-const WEBHOOK_GENERAR = "https://n8n.gorekia.com/webhook/generar-factura";
-const WEBHOOK_NUM_FACTURA = "https://n8n.gorekia.com/webhook/get-next-num-factura";
+const WEBHOOK_GENERAR       = "https://n8n.gorekia.com/webhook/generar-factura";
+const WEBHOOK_NUM_FACTURA   = "https://n8n.gorekia.com/webhook/get-next-num-factura";
+const WEBHOOK_GET_CLIENTS   = "https://n8n.gorekia.com/webhook/get-clientes";
+
+let totsElsClients = [];
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -19,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(e => console.error("Error obtenint num factura:", e));
 
+  // Cargar clientes para autocompletado
+  fetch(WEBHOOK_GET_CLIENTS)
+    .then(r => r.json())
+    .then(data => { totsElsClients = data; })
+    .catch(e => console.error("Error carregant clients:", e));
+
   // Cargar filas seleccionadas desde localStorage
   cargarLinies();
 
@@ -26,6 +35,45 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("preu-hora").addEventListener("input", function () {
     document.getElementById("linies-tbody").innerHTML = "";
     cargarLinies();
+  });
+
+  // Autocompletado de cliente
+  const inputNom = document.getElementById("nom-client");
+  const dropdown = document.getElementById("client-dropdown");
+
+  inputNom.addEventListener("input", function () {
+    const q = this.value.trim().toLowerCase();
+    dropdown.innerHTML = "";
+    if (q.length < 1) { dropdown.style.display = "none"; return; }
+
+    const resultats = totsElsClients.filter(c =>
+      c.nom.toLowerCase().includes(q)
+    ).slice(0, 6);
+
+    if (!resultats.length) { dropdown.style.display = "none"; return; }
+
+    resultats.forEach(c => {
+      const item = document.createElement("div");
+      item.className = "client-dropdown-item";
+      item.innerHTML = `<span class="dd-nom">${c.nom}</span><span class="dd-nif">${c.nif}</span>`;
+      item.addEventListener("click", function () {
+        document.getElementById("nom-client").value     = c.nom;
+        document.getElementById("nif-client").value     = c.nif;
+        document.getElementById("adreca-client").value  = c.adreca;
+        document.getElementById("poblacio-client").value = c.poblacio;
+        dropdown.style.display = "none";
+      });
+      dropdown.appendChild(item);
+    });
+
+    dropdown.style.display = "block";
+  });
+
+  // Cerrar dropdown al clicar fuera
+  document.addEventListener("click", function (e) {
+    if (!inputNom.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
   });
 
   // Botón generar
@@ -46,9 +94,21 @@ function cargarLinies() {
 
   const linies = indexos.map(i => registres[i]).filter(Boolean);
 
-  // Autorellenar el nombre del cliente con el de la primera fila seleccionada
+  // Autorellenar nombre cliente desde Google Sheets
   const nomClient = linies[0]["NOM CLIENT"] || "";
   document.getElementById("nom-client").value = nomClient;
+
+  // Intentar autorellenar datos del cliente si coincide exactamente
+  if (nomClient && totsElsClients.length) {
+    const coincidencia = totsElsClients.find(c =>
+      c.nom.toLowerCase() === nomClient.toLowerCase()
+    );
+    if (coincidencia) {
+      document.getElementById("nif-client").value      = coincidencia.nif;
+      document.getElementById("adreca-client").value   = coincidencia.adreca;
+      document.getElementById("poblacio-client").value = coincidencia.poblacio;
+    }
+  }
 
   let totalGeneral = 0;
   let totalHoresGeneral = 0;
@@ -62,7 +122,6 @@ function cargarLinies() {
     totalHoresGeneral += hores;
     totalGeneral += totalMaObra + totalMaterial;
 
-    // Línea 1 — mà d'obra
     const filaMaObra = document.createElement("div");
     filaMaObra.className = "table-data-row";
     filaMaObra.innerHTML = `
@@ -73,7 +132,6 @@ function cargarLinies() {
     `;
     tbody.appendChild(filaMaObra);
 
-    // Línea 2 — material (solo si existe)
     const material = r["MATERIAL"] ? r["MATERIAL"].trim() : "";
     const quantitat = r["QUANTITAT"] ? r["QUANTITAT"].toString().trim() : "";
     const preuUnitari = parseFloat(r["PREU-UNITARI"]) || 0;
@@ -103,12 +161,14 @@ function cargarLinies() {
 
 // ── GENERAR FACTURA ──
 async function generarFactura() {
-  const nomClient = document.getElementById("nom-client").value.trim();
-  const nifClient = document.getElementById("nif-client").value.trim();
-  const numFactura = document.getElementById("num-factura").value.trim();
-  const dataFactura = document.getElementById("data-factura").value;
-  const notes = document.getElementById("notes").value.trim();
-  const preuHora = parseFloat(document.getElementById("preu-hora").value) || 22.5;
+  const nomClient    = document.getElementById("nom-client").value.trim();
+  const nifClient    = document.getElementById("nif-client").value.trim();
+  const adrecaClient = document.getElementById("adreca-client").value.trim();
+  const poblacioClient = document.getElementById("poblacio-client").value.trim();
+  const numFactura   = document.getElementById("num-factura").value.trim();
+  const dataFactura  = document.getElementById("data-factura").value;
+  const notes        = document.getElementById("notes").value.trim();
+  const preuHora     = parseFloat(document.getElementById("preu-hora").value) || 22.5;
 
   if (!nomClient || !nifClient || !numFactura) {
     alert("Omple el nom del client, el NIF i el número de factura.");
@@ -124,14 +184,16 @@ async function generarFactura() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        num_factura: numFactura,
+        num_factura:  numFactura,
         data_factura: dataFactura,
-        nom_client: nomClient,
-        nif_client: nifClient,
-        notes: notes,
-        linies: window.liniesFactura,
-        total: window.totalFactura,
-        preu_hora: preuHora
+        nom_client:   nomClient,
+        nif_client:   nifClient,
+        adreca_client:   adrecaClient,
+        poblacio_client: poblacioClient,
+        notes:        notes,
+        linies:       window.liniesFactura,
+        total:        window.totalFactura,
+        preu_hora:    preuHora
       })
     });
 

@@ -63,7 +63,6 @@
             <div class="cell">Import</div>
             <div class="cell">Total</div>
           </div>
-          <!-- Filas generadas dinámicamente desde localStorage -->
           <div class="table-body" id="linies-tbody"></div>
           <div class="table-footer">
             <span id="resum-linies">— línies</span>
@@ -76,31 +75,49 @@
       <div class="col-right">
         <span class="section-label">Dades de la factura</span>
         <div class="form-card">
-          <div class="field-group">
+
+          <!-- NOM CLIENT amb autocompletado -->
+          <div class="field-group" style="position: relative;">
             <label class="field-label" for="nom-client">Nom del client</label>
-            <input class="field-input" type="text" id="nom-client" placeholder="Nom">
+            <input class="field-input" type="text" id="nom-client" placeholder="Escriu per cercar..." autocomplete="off">
+            <div id="client-dropdown" class="client-dropdown"></div>
           </div>
+
           <div class="field-group">
             <label class="field-label" for="nif-client">NIF del client</label>
             <input class="field-input" type="text" id="nif-client" placeholder="B12345678">
           </div>
+
+          <div class="field-group">
+            <label class="field-label" for="adreca-client">Adreça</label>
+            <input class="field-input" type="text" id="adreca-client" placeholder="c/ Exemple, 1">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="poblacio-client">Població</label>
+            <input class="field-input" type="text" id="poblacio-client" placeholder="08589 Sant Boi de Lluçanès">
+          </div>
+
           <div class="field-group">
             <label class="field-label" for="preu-hora">Preu per hora (€)</label>
             <input class="field-input" type="number" id="preu-hora" value="22.5" step="0.5" min="0">
           </div>
+
           <div class="field-group">
             <label class="field-label" for="num-factura">Número de factura</label>
-            <!-- Se autocompletará con el siguiente número disponible -->
             <input class="field-input" type="text" id="num-factura" placeholder="2026-001">
           </div>
+
           <div class="field-group">
             <label class="field-label" for="data-factura">Data de la factura</label>
             <input class="field-input" type="date" id="data-factura">
           </div>
+
           <div class="field-group">
             <label class="field-label" for="notes">Notes (opcional)</label>
             <textarea class="field-input" id="notes" placeholder="Observacions, condicions de pagament..."></textarea>
           </div>
+
         </div>
 
         <button class="btn-generar" id="btn-generar">
