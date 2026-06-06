@@ -6,15 +6,12 @@ let totsElsClients = [];
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  // Fecha de hoy en el topbar
   const hoy = new Date();
   document.getElementById("fecha-hoy").textContent =
     hoy.toLocaleDateString("ca-ES", { day: "numeric", month: "long", year: "numeric" });
 
-  // Fecha por defecto en el formulario
   document.getElementById("data-factura").value = hoy.toISOString().split("T")[0];
 
-  // Autorellenar número de factura
   fetch(WEBHOOK_NUM_FACTURA)
     .then(r => r.json())
     .then(data => {
@@ -22,22 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(e => console.error("Error obtenint num factura:", e));
 
-  // Cargar clientes para autocompletado
   fetch(WEBHOOK_GET_CLIENTS)
     .then(r => r.json())
     .then(data => { totsElsClients = data; })
     .catch(e => console.error("Error carregant clients:", e));
 
-  // Cargar filas seleccionadas desde localStorage
   cargarLinies();
 
-  // Evento dinámico — recalcular al cambiar precio hora
   document.getElementById("preu-hora").addEventListener("input", function () {
     document.getElementById("linies-tbody").innerHTML = "";
     cargarLinies();
   });
 
-  // Autocompletado de cliente
   const inputNom = document.getElementById("nom-client");
   const dropdown = document.getElementById("client-dropdown");
 
@@ -57,10 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
       item.className = "client-dropdown-item";
       item.innerHTML = `<span class="dd-nom">${c.nom}</span><span class="dd-nif">${c.nif}</span>`;
       item.addEventListener("click", function () {
-        document.getElementById("nom-client").value     = c.nom;
-        document.getElementById("nif-client").value     = c.nif;
-        document.getElementById("adreca-client").value  = c.adreca;
+        document.getElementById("nom-client").value      = c.nom;
+        document.getElementById("nif-client").value      = c.nif;
+        document.getElementById("adreca-client").value   = c.adreca;
         document.getElementById("poblacio-client").value = c.poblacio;
+        if (c.id === 3) {
+          document.getElementById("preu-hora").value = 17.5;
+          document.getElementById("linies-tbody").innerHTML = "";
+          cargarLinies();
+        }
         dropdown.style.display = "none";
       });
       dropdown.appendChild(item);
@@ -69,14 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.style.display = "block";
   });
 
-  // Cerrar dropdown al clicar fuera
   document.addEventListener("click", function (e) {
     if (!inputNom.contains(e.target) && !dropdown.contains(e.target)) {
       dropdown.style.display = "none";
     }
   });
 
-  // Botón generar
   document.getElementById("btn-generar").addEventListener("click", generarFactura);
 });
 
@@ -94,11 +90,9 @@ function cargarLinies() {
 
   const linies = indexos.map(i => registres[i]).filter(Boolean);
 
-  // Autorellenar nombre cliente desde Google Sheets
   const nomClient = linies[0]["NOM CLIENT"] || "";
   document.getElementById("nom-client").value = nomClient;
 
-  // Intentar autorellenar datos del cliente si coincide exactamente
   if (nomClient && totsElsClients.length) {
     const coincidencia = totsElsClients.find(c =>
       c.nom.toLowerCase() === nomClient.toLowerCase()
@@ -161,14 +155,15 @@ function cargarLinies() {
 
 // ── GENERAR FACTURA ──
 async function generarFactura() {
-  const nomClient    = document.getElementById("nom-client").value.trim();
-  const nifClient    = document.getElementById("nif-client").value.trim();
-  const adrecaClient = document.getElementById("adreca-client").value.trim();
+  const nomClient      = document.getElementById("nom-client").value.trim();
+  const nifClient      = document.getElementById("nif-client").value.trim();
+  const adrecaClient   = document.getElementById("adreca-client").value.trim();
   const poblacioClient = document.getElementById("poblacio-client").value.trim();
-  const numFactura   = document.getElementById("num-factura").value.trim();
-  const dataFactura  = document.getElementById("data-factura").value;
-  const notes        = document.getElementById("notes").value.trim();
-  const preuHora     = parseFloat(document.getElementById("preu-hora").value) || 22.5;
+  const numFactura     = document.getElementById("num-factura").value.trim();
+  const dataFactura    = document.getElementById("data-factura").value;
+  const notes          = document.getElementById("notes").value.trim();
+  const preuHora       = parseFloat(document.getElementById("preu-hora").value) || 22.5;
+  const iva            = parseFloat(document.getElementById("iva").value) ?? 21;
 
   if (!nomClient || !nifClient || !numFactura) {
     alert("Omple el nom del client, el NIF i el número de factura.");
@@ -184,16 +179,17 @@ async function generarFactura() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        num_factura:  numFactura,
-        data_factura: dataFactura,
-        nom_client:   nomClient,
-        nif_client:   nifClient,
+        num_factura:     numFactura,
+        data_factura:    dataFactura,
+        nom_client:      nomClient,
+        nif_client:      nifClient,
         adreca_client:   adrecaClient,
         poblacio_client: poblacioClient,
-        notes:        notes,
-        linies:       window.liniesFactura,
-        total:        window.totalFactura,
-        preu_hora:    preuHora
+        notes:           notes,
+        linies:          window.liniesFactura,
+        total:           window.totalFactura,
+        preu_hora:       preuHora,
+        iva:             iva
       })
     });
 
