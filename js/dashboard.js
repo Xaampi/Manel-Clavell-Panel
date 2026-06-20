@@ -77,4 +77,6 @@ function badgeHTML(estat) {
   return `<span class="badge ${cls}"><span class="badge-dot"></span>${label}</span>`;
 }
 
-loadDashboard();
+if (document.querySelector(".cards")) {
+  loadDashboard();
+}

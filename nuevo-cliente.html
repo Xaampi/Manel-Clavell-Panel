@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manel Clavell Jardineria — Nou client</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/nuevo-cliente.css">
+</head>
+
+<body>
+<div class="panel">
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="toggle-btn" id="toggleBtn" aria-label="Plegar menú">
+        <i class="ti ti-layout-sidebar-left-collapse" id="toggleIcon"></i>
+      </button>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="ti ti-layout-dashboard"></i>
+        <span class="nav-label">Inici</span>
+      </a>
+      <a href="registro-horas.html" class="nav-item">
+        <i class="ti ti-clock"></i>
+        <span class="nav-label">Hores</span>
+      </a>
+      <a href="generador-facturas.html" class="nav-item active">
+        <i class="ti ti-file-invoice"></i>
+        <span class="nav-label">Factures</span>
+      </a>
+      <a href="crm-facturas.html" class="nav-item">
+        <i class="ti ti-credit-card"></i>
+        <span class="nav-label">Cobros</span>
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="nav-item logout" id="btn-logout">
+        <i class="ti ti-logout"></i>
+        <span class="nav-label">Sortir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title">Nou client</span>
+      <span class="topbar-date" id="fecha-hoy"></span>
+    </div>
+
+    <div class="content">
+      <p class="section-title">Dades del client</p>
+      <div class="nou-client-card">
+
+        <div class="field-group">
+          <label class="field-label" for="nou-nom">Nom</label>
+          <input class="field-input" type="text" id="nou-nom" placeholder="Nom complet">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="nou-nif">NIF</label>
+          <input class="field-input" type="text" id="nou-nif" placeholder="B12345678">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="nou-adreca">Adreça</label>
+          <input class="field-input" type="text" id="nou-adreca" placeholder="c/ Exemple, 1">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="nou-poblacio">Població</label>
+          <input class="field-input" type="text" id="nou-poblacio" placeholder="08589 Sant Boi de Lluçanès">
+        </div>
+
+        <div class="nou-client-actions">
+          <button class="btn-secondary" onclick="window.location.href='generador-facturas.html'">
+            <i class="ti ti-arrow-left"></i>
+            Cancel·lar
+          </button>
+          <button class="btn-generar" id="btn-guardar">
+            <i class="ti ti-user-plus"></i>
+            Guardar client
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/nuevo-cliente.js"></script>
+</body>
+</html>

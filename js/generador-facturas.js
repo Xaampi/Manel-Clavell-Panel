@@ -1,6 +1,6 @@
-const WEBHOOK_GENERAR       = "https://n8n.gorekia.com/webhook/generar-factura";
-const WEBHOOK_NUM_FACTURA   = "https://n8n.gorekia.com/webhook/get-next-num-factura";
-const WEBHOOK_GET_CLIENTS   = "https://n8n.gorekia.com/webhook/get-clientes";
+const WEBHOOK_GENERAR      = "https://n8n.gorekia.com/webhook/generar-factura";
+const WEBHOOK_NUM_FACTURA  = "https://n8n.gorekia.com/webhook/get-next-num-factura";
+const WEBHOOK_GET_CLIENTS  = "https://n8n.gorekia.com/webhook/get-clientes";
 
 let totsElsClients = [];
 
@@ -43,8 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
       c.nom.toLowerCase().includes(q)
     ).slice(0, 6);
 
-    if (!resultats.length) { dropdown.style.display = "none"; return; }
-
     resultats.forEach(c => {
       const item = document.createElement("div");
       item.className = "client-dropdown-item";
@@ -63,6 +61,16 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       dropdown.appendChild(item);
     });
+
+    // Opció afegir nou client
+    const itemNou = document.createElement("div");
+    itemNou.className = "client-dropdown-item client-dropdown-nou";
+    itemNou.innerHTML = `<span class="dd-nou"><i class="ti ti-plus"></i> Afegir com a nou client</span>`;
+    itemNou.addEventListener("click", function () {
+      localStorage.setItem("nou_client_nom", inputNom.value.trim());
+      window.location.href = "nuevo-cliente.html";
+    });
+    dropdown.appendChild(itemNou);
 
     dropdown.style.display = "block";
   });
