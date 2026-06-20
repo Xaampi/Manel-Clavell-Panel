@@ -137,6 +137,18 @@
   </div>
 </div>
 
+<!-- MODAL ELIMINAR -->
+<div class="modal-overlay" id="modal-eliminar-overlay">
+  <div class="modal">
+    <p class="modal-title">Eliminar factura</p>
+    <p class="modal-text">Segur que vols eliminar la factura <strong id="eliminar-num-factura"></strong>? Aquesta acció no es pot desfer.</p>
+    <div class="modal-actions">
+      <button class="btn-clear" onclick="closeModalEliminar()">Cancel·lar</button>
+      <button class="btn-danger" onclick="confirmEliminar()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="js/crm-facturas.js"></script>

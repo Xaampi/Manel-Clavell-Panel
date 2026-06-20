@@ -1,11 +1,13 @@
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const WEBHOOK_GET   = "https://n8n.gorekia.com/webhook/get-facturas";
-const WEBHOOK_ESTAT = "https://n8n.gorekia.com/webhook/update-estat";
-const WEBHOOK_PDF   = "https://n8n.gorekia.com/webhook/regenerar-pdf";
+const WEBHOOK_GET      = "https://n8n.gorekia.com/webhook/get-facturas";
+const WEBHOOK_ESTAT     = "https://n8n.gorekia.com/webhook/update-estat";
+const WEBHOOK_PDF       = "https://n8n.gorekia.com/webhook/regenerar-pdf";
+const WEBHOOK_ELIMINAR  = "https://n8n.gorekia.com/webhook/eliminar-factura";
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allFactures = [];
 let editingId   = null;
+let deletingId  = null;
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
@@ -43,7 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === this) closeModal();
   });
 
-  console.log("Token:", localStorage.getItem("mcj_token"));
+  document.getElementById("modal-eliminar-overlay").addEventListener("click", function (e) {
+    if (e.target === this) closeModalEliminar();
+  });
+
   loadFactures();
 });
 
@@ -83,6 +88,9 @@ function renderTable(facturas) {
           </button>
           <button class="btn-icon" title="Canviar estat" onclick="openModal(${f.id}, \`${esc(f.estat)}\`)">
             <i class="ti ti-edit"></i>
+          </button>
+          <button class="btn-icon btn-icon-danger" title="Eliminar factura" onclick="openModalEliminar(${f.id}, \`${esc(f.num_factura)}\`)">
+            <i class="ti ti-trash"></i>
           </button>
         </div>
       </span>
@@ -133,7 +141,6 @@ function clearFilters() {
 
 // ── MODAL ESTAT ───────────────────────────────────────────────────────────────
 function openModal(id, estatActual) {
-  console.log('estat:', estatActual);
   editingId = id;
   document.getElementById("modal-select").value = estatActual;
   document.getElementById("modal-overlay").classList.add("open");
@@ -162,6 +169,36 @@ async function confirmEstat() {
     showToast("Error actualitzant l'estat");
   }
 }
+
+// ── MODAL ELIMINAR ────────────────────────────────────────────────────────────
+function openModalEliminar(id, numFactura) {
+  deletingId = id;
+  document.getElementById("eliminar-num-factura").textContent = numFactura;
+  document.getElementById("modal-eliminar-overlay").classList.add("open");
+}
+
+function closeModalEliminar() {
+  document.getElementById("modal-eliminar-overlay").classList.remove("open");
+  deletingId = null;
+}
+
+async function confirmEliminar() {
+  const id = deletingId;
+  closeModalEliminar();
+  try {
+    await fetch(WEBHOOK_ELIMINAR, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    });
+    allFactures = allFactures.filter(f => f.id !== id);
+    applyFilters();
+    showToast("Factura eliminada correctament");
+  } catch (e) {
+    showToast("Error eliminant la factura");
+  }
+}
+
 // ── DOWNLOAD PDF ────────────
 async function downloadPDF(id) {
   showToast("Generant PDF...");
